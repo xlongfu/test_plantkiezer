@@ -31,6 +31,17 @@ llm = init_chat_model(
     },
 )
 
+# ----- RAG process ----- 
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-mpnet-base-v2"
+)
+
+vectorstore = Qdrant.from_existing_collection(
+    collection_name="planten",
+    embedding=embeddings,
+    path="vector_stores/plantkiezer1",
+)
+
 # init and show chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -63,17 +74,6 @@ if prompt := st.chat_input("What kind of plants are you interested in?"):
             session_messages.append(HumanMessage(content=content))
 
     query = st.session_state.messages[-1]["content"]
-
-    # ----- RAG process ----- 
-    embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-mpnet-base-v2"
-    )
-
-    vectorstore = Qdrant.from_existing_collection(
-        collection_name="planten",
-        embedding=embeddings,
-        path="vector_stores/plantkiezer1",
-    )
 
     retrieved_docs = list(vectorstore.max_marginal_relevance_search(query, k=3, filter=None))
 
