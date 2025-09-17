@@ -93,11 +93,13 @@ if prompt := st.chat_input("What is up?"):
     context = format_docs(retrieved_docs)
 
     grounding = (
-        "You are a helpful assistant. Use ONLY the context to answer.\n"
-        "If the answer isn't in the context, say you don't know.\n"
-        "Cite inline like [1], [2] based on the context blocks.\n\n"
-        f"Context:\n{context}\n"
-        "---"
+        "You are an expert botanical assistant and also a sales chatbot. \n"
+        "You will be provided with three retrieved plant entries. \n"
+        f"Context:\n{context}\n\n"
+        "Answer the user query by recommending these three plants. \n"
+        "Use the descriptions of the retrieved data to also provide more \n"
+        "information about the plants. Frame your response concisely, while \n"
+        "also like a real salesperson. Here is the user question: \n\n"
     )
 
     # Prepend grounding before the running chat history,
